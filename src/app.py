@@ -140,7 +140,10 @@ if hasattr(_bg_transformed, "toarray"):
     _bg_transformed = _bg_transformed.toarray()
 _feature_names = _prep.get_feature_names_out()
 _background_df = pd.DataFrame(_bg_transformed, columns=_feature_names)
-_explainer = shap.Explainer(_classifier.predict_proba, _background_df)
+# LinearExplainer is exact and fast for linear models like Logistic
+# Regression — much lighter than the generic permutation-based
+# explainer, which was timing out on Render's limited free-tier resources.
+_explainer = shap.LinearExplainer(_classifier, _background_df)
 
 CATEGORICAL_OPTIONS = {
     col: [(code, LABEL_MAPS[col].get(code, code)) for code in sorted(X[col].unique().tolist())]
@@ -439,8 +442,8 @@ def predict():
         transformed = transformed.toarray()
     transformed_df = pd.DataFrame(transformed, columns=_feature_names)
 
-    shap_values = _explainer(transformed_df)
-    contributions = shap_values.values[0, :, 1]
+    shap_values = _explainer.shap_values(transformed_df)
+    contributions = shap_values[0]
 
     contrib_df = pd.DataFrame({
         "feature": _feature_names,
