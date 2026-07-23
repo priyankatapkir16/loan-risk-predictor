@@ -59,10 +59,10 @@ data/
 ## Screenshots
 
 **Safe applicant (1.6% predicted default risk):**
-*(insert screenshot here)*
+![Safe applicant result](screenshots/screenshot_safe.jpeg)
 
 **Risky applicant (96.6% predicted default risk), with SHAP explanation:**
-*(insert screenshot here)*
+![Risky applicant result](screenshots/screenshot_risky.jpeg)
 
 ## Tech Stack
 
