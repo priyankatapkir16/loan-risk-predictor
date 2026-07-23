@@ -7,6 +7,7 @@ then does a first look at the data.
 """
 
 import pandas as pd
+from pathlib import Path
 
 # The original UCI file is space-separated with no header row.
 # These are the 20 feature columns + 1 target column, in the exact
@@ -36,16 +37,17 @@ COLUMN_NAMES = [
 ]
 
 
-def load_raw_data(filepath: str = "data/german_credit.csv") -> pd.DataFrame:
-    """
-    Load the raw German Credit dataset.
 
-    The file is space-separated (not comma-separated, despite the .csv name
-    we gave it) so we tell pandas to split on whitespace with sep="\\s+".
-    """
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_PATH = BASE_DIR / "data" / "german_credit.csv"
+
+def load_raw_data(filepath=None) -> pd.DataFrame:
+    if filepath is None:
+        filepath = DATA_PATH
+
     df = pd.read_csv(filepath, sep=r"\s+", header=None, names=COLUMN_NAMES)
     return df
-
 
 def clean_target(df: pd.DataFrame) -> pd.DataFrame:
     """
