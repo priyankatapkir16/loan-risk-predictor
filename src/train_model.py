@@ -26,7 +26,6 @@ from sklearn.metrics import (
     roc_auc_score,
     confusion_matrix,
 )
-from xgboost import XGBClassifier
 import joblib
 
 from load_data import load_raw_data, clean_target
@@ -66,6 +65,7 @@ def train_logistic_regression(preprocessor, X_train, y_train):
 
 
 def train_xgboost(preprocessor, X_train, y_train):
+    from xgboost import XGBClassifier  # lazy import: only load xgboost when actually training it
     neg_count = (y_train == 0).sum()
     pos_count = (y_train == 1).sum()
     scale_pos_weight = neg_count / pos_count
